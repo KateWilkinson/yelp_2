@@ -69,6 +69,58 @@ feature "When users are logged in" do
     expect(page).to have_content 'You do not have permission to delete this restaurant'
   end
 
+  it "they can only delete there own reviews for their restaurants" do
+    visit '/'
+    sign_up
+    click_link 'Add a restaurant'
+    fill_in 'Name', with: 'Trade'
+    click_button 'Create Restaurant'
+    expect(current_path).to eq '/restaurants'
+    click_link 'Review Trade'
+    fill_in 'Thoughts', with: 'good'
+    click_button 'Leave Review'
+    expect(current_path).to eq '/restaurants'
+    click_link 'Delete review for Trade'
+    expect(current_path).to eq '/'
+    expect(page).to have_content 'You have succesfully deleted your review'
+  end
+
+  it "they can't delete other peoples reviews for restaurants" do
+    visit '/'
+    sign_up
+    click_link 'Add a restaurant'
+    fill_in 'Name', with: 'Trade'
+    click_button 'Create Restaurant'
+    expect(current_path).to eq '/restaurants'
+    click_link 'Review Trade'
+    fill_in 'Thoughts', with: 'good'
+    click_button 'Leave Review'
+    click_link 'Sign out'
+    sign_up_2
+    expect(current_path).to eq '/'
+    click_link 'Delete review for Trade'
+    expect(current_path).to eq '/'
+    expect(page).to have_content 'You do not have permission to delete this review'
+  end
+
+  it "they can delete their reviews for other peoples restaurants" do
+    visit '/'
+    sign_up
+    click_link 'Add a restaurant'
+    fill_in 'Name', with: 'Trade'
+    click_button 'Create Restaurant'
+    expect(current_path).to eq '/restaurants'
+    click_link 'Sign out'
+    sign_up_2
+    click_link 'Review Trade'
+    fill_in 'Thoughts', with: 'good'
+    click_button 'Leave Review'
+    expect(current_path).to eq '/'
+    click_link 'Delete review for Trade'
+    expect(current_path).to eq '/'
+    expect(page).to have_content 'You have succesfully deleted your review'
+  end
+
   def sign_up
     visit '/'
     click_link 'Sign up'
