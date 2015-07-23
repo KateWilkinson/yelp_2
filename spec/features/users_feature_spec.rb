@@ -51,7 +51,7 @@ feature "When users are logged in" do
     expect(current_path).to eq '/'
     click_link 'Edit Trade'
     expect(current_path).to eq '/'
-    expect(page).to have_content 'error'
+    expect(page).to have_content 'You do not have permission to edit this restaurant'
   end
 
   def sign_up

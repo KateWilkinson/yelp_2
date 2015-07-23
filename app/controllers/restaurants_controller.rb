@@ -11,11 +11,10 @@ class RestaurantsController < ApplicationController
   end
 
   def create
-    restaurant = Restaurant.new(restaurant_params)
-    if restaurant.save
+    @restaurant = current_user.restaurants.build(restaurant_params)
+    if @restaurant.save
       redirect_to '/restaurants'
     else
-      @restaurant = restaurant
       render 'new'
     end
   end
@@ -30,13 +29,12 @@ class RestaurantsController < ApplicationController
 
   def edit
     @restaurant = Restaurant.find(params[:id])
-    # @user =
-    # if user =
-    #   user who created the restaurant
-    #   go ahead
-    # else
-    #   reject redirect and error
-    # end
+      if current_user.id === @restaurant.user_id
+        @restaurant = Restaurant.find(params[:id])
+      else
+        flash[:notice] = 'You do not have permission to edit this restaurant'
+        redirect_to '/'
+      end
   end
 
   def update
