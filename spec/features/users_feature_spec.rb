@@ -121,6 +121,25 @@ feature "When users are logged in" do
     expect(page).to have_content 'You have succesfully deleted your review'
   end
 
+  it "they can only leave one review per restaurant" do
+    visit '/'
+    sign_up
+    click_link 'Add a restaurant'
+    fill_in 'Name', with: 'Trade'
+    click_button 'Create Restaurant'
+    expect(current_path).to eq '/restaurants'
+    click_link 'Review Trade'
+    fill_in 'Thoughts', with: 'good'
+    click_button 'Leave Review'
+    expect(current_path).to eq '/restaurants'
+    click_link 'Review Trade'
+    fill_in 'Thoughts', with: 'bad'
+    click_button 'Leave Review'
+    expect(current_path).to eq '/restaurants'
+    expect(page).to have_content 'You have already reviewed this restaurant'
+    expect(page).not_to have_content 'bad'
+  end
+
   def sign_up
     visit '/'
     click_link 'Sign up'
