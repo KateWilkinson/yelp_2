@@ -81,7 +81,7 @@ feature "When users are logged in" do
     click_button 'Leave Review'
     expect(current_path).to eq '/restaurants'
     click_link 'Delete review for Trade'
-    expect(current_path).to eq '/'
+    expect(current_path).to eq '/restaurants'
     expect(page).to have_content 'You have succesfully deleted your review'
   end
 
@@ -115,9 +115,9 @@ feature "When users are logged in" do
     click_link 'Review Trade'
     fill_in 'Thoughts', with: 'good'
     click_button 'Leave Review'
-    expect(current_path).to eq '/'
+    expect(current_path).to eq '/restaurants'
     click_link 'Delete review for Trade'
-    expect(current_path).to eq '/'
+    expect(current_path).to eq '/restaurants'
     expect(page).to have_content 'You have succesfully deleted your review'
   end
 
