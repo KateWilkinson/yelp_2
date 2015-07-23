@@ -30,6 +30,13 @@ class RestaurantsController < ApplicationController
 
   def edit
     @restaurant = Restaurant.find(params[:id])
+    # @user =
+    # if user =
+    #   user who created the restaurant
+    #   go ahead
+    # else
+    #   reject redirect and error
+    # end
   end
 
   def update
