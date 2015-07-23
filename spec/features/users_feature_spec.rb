@@ -54,6 +54,21 @@ feature "When users are logged in" do
     expect(page).to have_content 'You do not have permission to edit this restaurant'
   end
 
+  it "they can only delete there own restaurants" do
+    visit '/'
+    sign_up
+    click_link 'Add a restaurant'
+    fill_in 'Name', with: 'Trade'
+    click_button 'Create Restaurant'
+    expect(current_path).to eq '/restaurants'
+    click_link 'Sign out'
+    sign_up_2
+    expect(current_path).to eq '/'
+    click_link 'Delete Trade'
+    expect(current_path).to eq '/'
+    expect(page).to have_content 'You do not have permission to delete this restaurant'
+  end
+
   def sign_up
     visit '/'
     click_link 'Sign up'
